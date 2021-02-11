@@ -20,7 +20,7 @@ Attribute VB_Name = "Xhelper"
 ' arrayInfo(2) returns array CountA
 ' arrayInfo(3) returns TypeName
 '*/
-Public Function ArrayLength(arr As Arrya) 
+Public Function ArrayLength(arr) 
     
   Dim xArryDim As Integer
   Dim yArryDim As Integer
@@ -56,23 +56,55 @@ End Function
 'Clear All Sheets Formulas
 '
 '*/
-Public Function clearFormulas(Optional sheets As Array)
+Public Function clearFormulas(Optional ignoreSheets)
 
   Dim ws As Worksheet
   Set ws = ActiveSheet
   For Each ws In Worksheets
-    ws.Activate
-    With ws.UsedRange
-      .Copy
-      .PasteSpecial Paste:=xlPasteValues, _
-      Operation:=xlNone, SkipBlanks:=False, Transpose:=False
-      Application.CutCopyMode = False
-    End With
+   
+    If IsMissing(ignoreSheets) Then
+      Call clearFormulasHandler(ws)
+    Else
+      'Check ignored sheets
+    End If
+  
+
   Next
 End Function
 
-Private  Function ignoreSheets(sheets,ws)
+'/*
+'Handler for clear excel Sheet UsedRange formulas
+'@ {Worksheet} ws
+'*/
+Private  Function clearFormulasHandler(ws As Worksheet)
+  ws.Activate
+  With ws.UsedRange
+    .Copy
+    .PasteSpecial Paste:=xlPasteValues, _
+    Operation:=xlNone, SkipBlanks:=False, Transpose:=False
+    Application.CutCopyMode = False
+  End With
+End Function
 
 
+'/*
+'
+'
+'*/  
+Private  Function checkIgnoreSheet(ignoreSheets,sheetName)
+
+  Dim name As Variant
+  Dim  ignore As Boolean
+
+  For Each name In ignoreSheets
+    ignore = InStr(1, name,sheetName, vbTextCompare) > 0
+    If (ignore) Then
+      ignoreSheet =  ignore
+      Exit Function
+    End If
+   
+  Next
+
+  ignoreSheet =  ignore
 
 End Function
