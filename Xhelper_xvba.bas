@@ -146,8 +146,35 @@ Private  Function checkIgnoreSheet(ignoreSheetsArray As Variant ,sheetName As St
   For Each name In ignoreSheetsArray
     ignore = InStr(1, name,sheetName, vbTextCompare) > 0
     If (ignore) Then Exit For
-  Next
+    Next
 
     checkIgnoreSheet =  ignore
+
+End Function
+
+
+'/*
+'
+'Handller For set Application States off
+' DisplayAlerts
+' Calculation
+' ScreenUpdating
+' EnableEvents
+'
+'@Param {Boolean} state = false
+'
+'*/
+Public Function setAppUpdateState(Optional state As Boolean = False)
+
+  Application.DisplayAlerts = state
+  Application.ScreenUpdating = state
+  Application.EnableEvents = state
+
+  If (state) Then
+    Application.Calculation = xlAutomatic
+  else
+    Application.Calculation = xlCalculationManual
+  End If
+
 
 End Function
