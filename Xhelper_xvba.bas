@@ -55,17 +55,24 @@ End Function
 '
 'Clear All Sheets Formulas
 '
+'@param {Array:String} ignoreSheets - List off sheets name to ignore
+'
 '*/
 Public Function clearFormulas(Optional ignoreSheets)
 
   Dim ws As Worksheet
   Set ws = ActiveSheet
+  Dim ignore As Boolean
   For Each ws In Worksheets
    
     If IsMissing(ignoreSheets) Then
       Call clearFormulasHandler(ws)
     Else
       'Check ignored sheets
+      ignore = checkIgnoreSheet(ignoreSheets,ws.Name)
+      if(ignore) then
+        Call clearFormulasHandler(ws)
+      End If
     End If
   
 
@@ -78,6 +85,7 @@ End Function
 '*/
 Private  Function clearFormulasHandler(ws As Worksheet)
   ws.Activate
+
   With ws.UsedRange
     .Copy
     .PasteSpecial Paste:=xlPasteValues, _
@@ -88,15 +96,17 @@ End Function
 
 
 '/*
-'
-'
+'Check if the sheet (by name) is ignored
+'@param {Variant} ignoreSheets Array of string
+'@return{Boolean} ignore - Ture is the sheet is in ignored Array
+'                        - False if Sheet is not in Ignore Array
 '*/  
-Private  Function checkIgnoreSheet(ignoreSheets,sheetName)
+Private  Function checkIgnoreSheet(ignoreSheetsArray As String,sheetName) As Boolean
 
   Dim name As Variant
   Dim  ignore As Boolean
 
-  For Each name In ignoreSheets
+  For Each name In ignoreSheetsArray
     ignore = InStr(1, name,sheetName, vbTextCompare) > 0
     If (ignore) Then
       ignoreSheet =  ignore
