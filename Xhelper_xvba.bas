@@ -178,3 +178,24 @@ Public Function setAppUpdateState(Optional state As Boolean = False)
 
 
 End Function
+
+'/*
+' This FunctionDelete coloumns between NamedRanges
+'
+'
+'*/
+Public Function delColBetweenNameRanges(startNamedRange,endNamedRange)
+
+
+ Dim startColumn As Variant
+ Dim endColumn As Variant
+    
+ startColumn = Columns(Split(Replace(Split(Range(startNamedRange).Address, ":")(1), "$", "", 1, 1), "$")(0)).Column + 1
+ endColumn = Columns(Split(Replace(Split(Range(endNamedRange).Address, ":")(0), "$", "", 1, 1), "$")(0)).Column - 1
+   
+ Columns(Split(Cells(1, startColumn).Address, "$")(1) & ":" & Split(Cells(1, endColumn).Address, "$")(1)).Select
+ Selection.Delete Shift:=xlToLeft
+   
+  
+End Function
+
