@@ -96,6 +96,43 @@ End Function
 
 
 '/*
+'
+'Delete Sheets on worksheet
+'
+'@param {Array:String} ignoreSheets - List of sheets name to ignore clear formulas
+'*/
+Public Sub deleteSheets(Optional ignoreSheetsArray As Variant)
+    
+  Dim ws As Worksheet
+  Set ws = ActiveSheet
+  Dim ignoreSheet As Boolean
+  ignoreSheet = FALSE
+  Dim isMissingIgnoredSheets AS Boolean
+  
+  isMissingIgnoredSheets =  IsMissing(ignoreSheetsArray)
+
+  For Each ws In Worksheets
+    ws.Activate
+    
+    if (NOT isMissingIgnoredSheets) Then
+      ignoreSheet = checkIgnoreSheet(ignoreSheetsArray ,ws.Name) 
+    End If
+   
+            
+    If (NOT ignoreSheet) Then
+    
+      Application.DisplayAlerts = False
+      ws.Delete
+      Application.DisplayAlerts = True
+     
+    End If
+
+  Next
+  Application.Sheets(1).Select
+End Sub
+
+
+'/*
 'Check if the sheet (by name) is ignored
 '@param {Variant} ignoreSheets Array of string
 '@return{Boolean} ignore - Ture is the sheet is in ignored Array
@@ -108,13 +145,9 @@ Private  Function checkIgnoreSheet(ignoreSheetsArray As Variant ,sheetName As St
 
   For Each name In ignoreSheetsArray
     ignore = InStr(1, name,sheetName, vbTextCompare) > 0
-    If (ignore) Then
-      ignoreSheet =  ignore
-      Exit Function
-    End If
-   
+    If (ignore) Then Exit For
   Next
 
-  ignoreSheet =  ignore
+    checkIgnoreSheet =  ignore
 
 End Function
