@@ -1,15 +1,15 @@
 {
-  "package": "Xhelper",
+  "package": "xhelper",
   "version": "1.0.0",
   "author": "Alberto Eduardo",
   "email": "alberto.aeraph@gmail.com",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Aeraphe/xvba-cli.git"
+    "url": "https://github.com/Aeraphe/Xhelper.git"
   },
   "description": "Creating amazing XVBA packages",
   "dependencies": {},
   "dev_dependencies": {},
-  "homepage": "https://github.com/Aeraphe/xvba-cli"
+  "homepage": "https://github.com/Aeraphe/Xhelper"
 }
