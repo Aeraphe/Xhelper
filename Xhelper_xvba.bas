@@ -55,7 +55,7 @@ End Function
 '
 'Clear All Sheets Formulas
 '
-'@param {Array:String} ignoreSheets - List off sheets name to ignore
+'@param {Array:String} ignoreSheets - List of sheets name to ignore clear formulas
 '
 '*/
 Public Function clearFormulas(Optional ignoreSheets)
@@ -70,7 +70,7 @@ Public Function clearFormulas(Optional ignoreSheets)
     Else
       'Check ignored sheets
       ignore = checkIgnoreSheet(ignoreSheets,ws.Name)
-      if(ignore) then
+      if(Not ignore) then
         Call clearFormulasHandler(ws)
       End If
     End If
@@ -101,7 +101,7 @@ End Function
 '@return{Boolean} ignore - Ture is the sheet is in ignored Array
 '                        - False if Sheet is not in Ignore Array
 '*/  
-Private  Function checkIgnoreSheet(ignoreSheetsArray As String,sheetName) As Boolean
+Private  Function checkIgnoreSheet(ignoreSheetsArray As Variant ,sheetName As String) As Boolean
 
   Dim name As Variant
   Dim  ignore As Boolean
