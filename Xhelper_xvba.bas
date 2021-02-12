@@ -283,7 +283,28 @@ Public Function delColAfterNameRanges(startNamedRange)
     
 End Function
 
-  
+
+'/*
+' This Function Delete coloumns before  NamedRange
+'
+'@param {String} namedRange : Name Range
+'@param {Long} startColumn : First Column number
+'
+'*/
+Public Function delColBeforeNameRange(namedRange,Optional startColumn As Long = 1)
+
+  Dim endColumn As Variant
+     
+  endColumn = Columns(Split(Replace(Split(Range(namedRange).Address, ":")(0), "$", "", 1, 1), "$")(0)).Column - 1
+
+  Columns(Split(Cells(1, startColumn).Address, "$")(1) & ":" & Split(Cells(1, endColumn).Address, "$")(1)).Select
+  Selection.Delete Shift:=xlToLeft
+    
+End Function
+
+
+
+
 '/*
 '
 'Delete Empty Rows in selected RangeNamed by select a cell to check the empty condition
@@ -305,7 +326,8 @@ Public Function delEmptyRowsInRange(rangeNamed As String,Optional cellColumn As 
 
     cellValue =  Cells(rowNumber,cellColumn).Value
 
-    If(IsEmpty(cellValue)) then
+    If(IsEmpty(cellValue) OR cellValue = "") then
+      Range(rowNumber & ":" & rowNumber).Select
       Selection.Delete Shift:=xlUp
     End IF
 
@@ -314,5 +336,7 @@ Public Function delEmptyRowsInRange(rangeNamed As String,Optional cellColumn As 
 
 End Function
     
+
+  
 
  
