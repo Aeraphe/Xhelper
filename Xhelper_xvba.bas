@@ -274,9 +274,15 @@ Public Function delColAfterNameRanges(startNamedRange)
 
   Dim startColumn As Variant
   Dim endColumn As Variant
+
+  Dim sht As Worksheet
+  Set sht = ThisWorkbook.ActiveSheet
+  
      
   startColumn = Columns(Split(Replace(Split(Range(startNamedRange).Address, ":")(1), "$", "", 1, 1), "$")(0)).Column + 1
-  endColumn = Cells(7, Columns.Count).End(xlToLeft).Column
+  'endColumn = Cells(1, Columns.Count).End(xlToLeft).Column
+  endColumn = sht.UsedRange.Columns(sht.UsedRange.Columns.Count).Column
+    
     
   Columns(Split(Cells(1, startColumn).Address, "$")(1) & ":" & Split(Cells(1, endColumn).Address, "$")(1)).Select
   Selection.Delete Shift:=xlToLeft
