@@ -187,14 +187,14 @@ End Function
 Public Function delColBetweenNameRanges(startNamedRange,endNamedRange)
 
 
- Dim startColumn As Variant
- Dim endColumn As Variant
+  Dim startColumn As Variant
+  Dim endColumn As Variant
     
- startColumn = Columns(Split(Replace(Split(Range(startNamedRange).Address, ":")(1), "$", "", 1, 1), "$")(0)).Column + 1
- endColumn = Columns(Split(Replace(Split(Range(endNamedRange).Address, ":")(0), "$", "", 1, 1), "$")(0)).Column - 1
+  startColumn = Columns(Split(Replace(Split(Range(startNamedRange).Address, ":")(1), "$", "", 1, 1), "$")(0)).Column + 1
+  endColumn = Columns(Split(Replace(Split(Range(endNamedRange).Address, ":")(0), "$", "", 1, 1), "$")(0)).Column - 1
    
- Columns(Split(Cells(1, startColumn).Address, "$")(1) & ":" & Split(Cells(1, endColumn).Address, "$")(1)).Select
- Selection.Delete Shift:=xlToLeft
+  Columns(Split(Cells(1, startColumn).Address, "$")(1) & ":" & Split(Cells(1, endColumn).Address, "$")(1)).Select
+  Selection.Delete Shift:=xlToLeft
    
   
 End Function
@@ -219,7 +219,7 @@ Public Function delRowsBetweenNameRanges(topNamedRange As String,bottomNamedRang
   Rows(startRow & ":" & endRow).Select
   Selection.Delete Shift:=xlToLeft
       
- End Function
+End Function
 
 
 
@@ -238,7 +238,7 @@ Public Function delRowsAboveNameRange(bottomNamedRange As String,Optional startR
   Rows(startRow & ":" & endRow).Select
   Selection.Delete Shift:=xlToLeft
       
- End Function
+End Function
 
 
 '/*
@@ -259,7 +259,7 @@ Public Function delRowsBelowNameRange(nameRange As String)
   Rows(startRow & ":" & endRow).Select
   Selection.Delete Shift:=xlToLeft
       
- End Function
+End Function
 
 
 
@@ -283,5 +283,7 @@ Public Function delColAfterNameRanges(startNamedRange)
   Selection.Delete Shift:=xlToLeft
     
    
- End Function
+End Function
+
+
  
