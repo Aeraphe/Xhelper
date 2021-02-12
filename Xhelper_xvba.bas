@@ -199,3 +199,22 @@ Public Function delColBetweenNameRanges(startNamedRange,endNamedRange)
   
 End Function
 
+
+  
+'/*
+' This Function Delete rows between top and Bottom NamedRanges
+'
+'
+'*/
+Public Function delRowsBetweenNameRanges(topNamedRange As String,bottomNamedRange As String)
+
+  Dim startRow As Variant
+  Dim endRow As Variant
+     
+  startRow = Split(Replace(Split(Range(topNamedRange).Address, ":")(1), "$", "", 1, 1), "$")(1) + 1
+  endRow = Split(Replace(Split(Range(bottomNamedRange).Address, ":")(0), "$", "", 1, 1), "$")(1) - 1
+ 
+  Rows(startRow & ":" & endRow).Select
+  Selection.Delete Shift:=xlToLeft
+      
+ End Function
