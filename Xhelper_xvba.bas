@@ -241,7 +241,7 @@ Public Function delRowsAboveNameRange(bottomNamedRange As String,Optional startR
  End Function
 
 
-  '/*
+'/*
 ' This Function Delete rows below NamedRanges
 '
 '
@@ -262,3 +262,26 @@ Public Function delRowsBelowNameRange(nameRange As String)
  End Function
 
 
+
+
+'/*
+' This Function Delete coloumns beAfter  NamedRange
+'
+'@param {String} startNamedRange : Name Range
+'
+'*/
+Public Function delColAfterNameRanges(startNamedRange)
+
+
+  Dim startColumn As Variant
+  Dim endColumn As Variant
+     
+  startColumn = Columns(Split(Replace(Split(Range(startNamedRange).Address, ":")(1), "$", "", 1, 1), "$")(0)).Column + 1
+  endColumn = Cells(7, Columns.Count).End(xlToLeft).Column
+    
+  Columns(Split(Cells(1, startColumn).Address, "$")(1) & ":" & Split(Cells(1, endColumn).Address, "$")(1)).Select
+  Selection.Delete Shift:=xlToLeft
+    
+   
+ End Function
+ 
