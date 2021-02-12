@@ -210,14 +210,17 @@ Public Function delRowsBetweenNameRanges(topNamedRange As String,bottomNamedRang
 
   Dim startRow As Variant
   Dim endRow As Variant
-     
+    
   startRow = Split(Replace(Split(Range(topNamedRange).Address, ":")(1), "$", "", 1, 1), "$")(1) + 1
+  On Error Resume Next
   endRow = Split(Replace(Split(Range(bottomNamedRange).Address, ":")(0), "$", "", 1, 1), "$")(1) - 1
+  endRow = Replace(Split(Range(bottomNamedRange).Address, ":")(0), "$", "", 1, 1) - 1
  
   Rows(startRow & ":" & endRow).Select
   Selection.Delete Shift:=xlToLeft
       
  End Function
+
 
 
   
@@ -226,7 +229,7 @@ Public Function delRowsBetweenNameRanges(topNamedRange As String,bottomNamedRang
 '
 '
 '*/
-Public Function delRowsAboveNameRange(Optional startRow As Variant = 1,bottomNamedRange As String)
+Public Function delRowsAboveNameRange(bottomNamedRange As String,Optional startRow As Integer = 1)
 
   Dim endRow As Variant
 
@@ -248,10 +251,10 @@ Public Function delRowsBelowNameRange(nameRange As String)
   Dim startRow As Variant
   Dim endRow As Variant
   
-  endRow = sht.Cells.SpecialCells(xlCellTypeLastCell).Row
-
-  startRow = Split(Replace(Split(Range(topNamedRange).Address, ":")(1), "$", "", 1, 1), "$")(1) + 1
-
+  endRow = Cells.SpecialCells(xlCellTypeLastCell).Row
+  On Error Resume Next
+  startRow = Split(Replace(Split(Range(nameRange).Address, ":")(1), "$", "", 1, 1), "$")(1) + 1
+  startRow = Replace(Split(Range(nameRange).Address, ":")(1), "$", "", 1, 1) + 1
  
   Rows(startRow & ":" & endRow).Select
   Selection.Delete Shift:=xlToLeft
