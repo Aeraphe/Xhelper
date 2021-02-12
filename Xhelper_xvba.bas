@@ -337,7 +337,7 @@ Public Function delEmptyRowsInRange(rangeNamed As String,Optional cellColumn As 
 End Function
     
 
-  '/*
+'/*
 '
 'Save the actual workbook state and create a TMP 
 'workbook for process the changes
@@ -363,6 +363,24 @@ Public  Function saveWorkbookFileTemp(Optional tmpSaveNamed As String = "workboo
   'Save CPU Temp Files
   App.ThisWorkbook.SaveAs (fileTemp)
 
+End Function
+
+
+'/*
+'
+' This Function Save new workbook with without formulas in xlsx
+'
+'*/
+Public  Function saveFileWithoutFormulas(filename As String,filePath As String)
+  Dim App As Application
+  Set App = Application
+  'Save CPU file
+  Application.DisplayAlerts = False
+  Dim CpuFileName As String
+  CpuFileName = filePath & "\" & filename & ".xlsx"
+  App.ThisWorkbook.SaveAs Filename:=CpuFileName, FileFormat:=xlOpenXMLWorkbook
+  App.ThisWorkbook.Save
+   
 End Function
 
  
