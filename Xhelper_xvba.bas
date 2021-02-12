@@ -263,7 +263,6 @@ End Function
 
 
 
-
 '/*
 ' This Function Delete coloumns beAfter  NamedRange
 '
@@ -282,8 +281,38 @@ Public Function delColAfterNameRanges(startNamedRange)
   Columns(Split(Cells(1, startColumn).Address, "$")(1) & ":" & Split(Cells(1, endColumn).Address, "$")(1)).Select
   Selection.Delete Shift:=xlToLeft
     
-   
 End Function
 
+  
+'/*
+'
+'Delete Empty Rows in selected RangeNamed by select a cell to check the empty condition
+'
+'@param {String} rangeNamed : Ramge name
+'@param {Long} cellColumn [Optional = 1] the cell column for check isEmpty
+'/*
+Public Function delEmptyRowsInRange(rangeNamed As String,Optional cellColumn As Long = 1)
+
+  Dim rn As Range
+  Dim rowNumber As Variant
+  Dim cellValue As Variant
+  Set rn = Range(rangeNamed)
+
+  For each rowItem in rn.Rows
+
+    rowItem.Select
+    rowNumber = rowItem.Row
+
+    cellValue =  Cells(rowNumber,cellColumn).Value
+
+    If(IsEmpty(cellValue)) then
+      Selection.Delete Shift:=xlUp
+    End IF
+
+  Next rowItem
+
+
+End Function
+    
 
  
