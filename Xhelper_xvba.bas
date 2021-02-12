@@ -337,6 +337,32 @@ Public Function delEmptyRowsInRange(rangeNamed As String,Optional cellColumn As 
 End Function
     
 
-  
+  '/*
+'
+'Save the actual workbook state and create a TMP 
+'workbook for process the changes
+'
+'*/
+Public  Function saveWorkbookFileTemp(Optional tmpSaveNamed As String = "workbook_temp",Optional extension As String = "xlsb")
+
+  Dim App As Application
+  Set App = Application
+  Dim fileTemp As String
+
+
+  'Save ThisWorkbook
+  App.ThisWorkbook.Save
+  'Save this workbook on TEMP folder for make changes
+  Dim tempFolder As String
+  tempFolder = Environ("Temp")
+  'Temp file
+  fileTemp = tempFolder & "\" & tmpSaveNamed & "." &  extension
+  'Clear Temp CPU Temp file if Exist
+  On Error Resume Next
+  Kill fileTemp
+  'Save CPU Temp Files
+  App.ThisWorkbook.SaveAs (fileTemp)
+
+End Function
 
  
