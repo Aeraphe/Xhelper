@@ -237,3 +237,25 @@ Public Function delRowsAboveNameRange(Optional startRow As Variant = 1,bottomNam
       
  End Function
 
+
+  '/*
+' This Function Delete rows below NamedRanges
+'
+'
+'*/
+Public Function delRowsBelowNameRange(nameRange As String)
+
+  Dim startRow As Variant
+  Dim endRow As Variant
+  
+  endRow = sht.Cells.SpecialCells(xlCellTypeLastCell).Row
+
+  startRow = Split(Replace(Split(Range(topNamedRange).Address, ":")(1), "$", "", 1, 1), "$")(1) + 1
+
+ 
+  Rows(startRow & ":" & endRow).Select
+  Selection.Delete Shift:=xlToLeft
+      
+ End Function
+
+
