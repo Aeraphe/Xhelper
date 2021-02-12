@@ -218,3 +218,22 @@ Public Function delRowsBetweenNameRanges(topNamedRange As String,bottomNamedRang
   Selection.Delete Shift:=xlToLeft
       
  End Function
+
+
+  
+'/*
+' This Function Delete rows abouve NamedRanges
+'
+'
+'*/
+Public Function delRowsAboveNameRange(Optional startRow As Variant = 1,bottomNamedRange As String)
+
+  Dim endRow As Variant
+
+  endRow = Split(Replace(Split(Range(bottomNamedRange).Address, ":")(0), "$", "", 1, 1), "$")(1) - 1
+ 
+  Rows(startRow & ":" & endRow).Select
+  Selection.Delete Shift:=xlToLeft
+      
+ End Function
+
