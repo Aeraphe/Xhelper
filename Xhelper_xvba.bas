@@ -334,7 +334,6 @@ Public Function delRowsByCheckCellValue(Optional ByVal startRow As Long = 1,Opti
 
     If(cellValue = condition And firstRow = 0 ) then
       firstRow = rowNumber
-      'Selection(rowNumber).Delete Shift:=xlUp
     End IF
 
     if(firstRow <> 0 And cellValue<> condition And lastRow = 0) then
@@ -344,7 +343,9 @@ Public Function delRowsByCheckCellValue(Optional ByVal startRow As Long = 1,Opti
     if(firstRow<> 0 And  lastRow <> 0)Then
 
       Range(firstRow & ":" & lastRow).Delete Shift:=xlUp
-      Call delRowsByCheckCellValue(firstRow, columnCheckEmpty)
+
+      Call delRowsByCheckCellValue(firstRow, columnCheckEmpty,condition)
+      
       firstRow = 0
       lastRow = 0
     End If
