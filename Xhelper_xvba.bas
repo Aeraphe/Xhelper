@@ -193,8 +193,7 @@ Public Function delColBetweenNameRanges(startNamedRange,endNamedRange)
   startColumn = Columns(Split(Replace(Split(Range(startNamedRange).Address, ":")(1), "$", "", 1, 1), "$")(0)).Column + 1
   endColumn = Columns(Split(Replace(Split(Range(endNamedRange).Address, ":")(0), "$", "", 1, 1), "$")(0)).Column - 1
    
-  Columns(Split(Cells(1, startColumn).Address, "$")(1) & ":" & Split(Cells(1, endColumn).Address, "$")(1)).Select
-  Selection.Delete Shift:=xlToLeft
+  Columns(Split(Cells(1, startColumn).Address, "$")(1) & ":" & Split(Cells(1, endColumn).Address, "$")(1)).Delete Shift:=xlToLeft
    
   
 End Function
@@ -216,8 +215,7 @@ Public Function delRowsBetweenNameRanges(topNamedRange As String,bottomNamedRang
   endRow = Split(Replace(Split(Range(bottomNamedRange).Address, ":")(0), "$", "", 1, 1), "$")(1) - 1
   endRow = Replace(Split(Range(bottomNamedRange).Address, ":")(0), "$", "", 1, 1) - 1
  
-  Rows(startRow & ":" & endRow).Select
-  Selection.Delete Shift:=xlToLeft
+  Rows(startRow & ":" & endRow).Delete Shift:=xlToLeft
       
 End Function
 
@@ -235,8 +233,7 @@ Public Function delRowsAboveNameRange(bottomNamedRange As String,Optional startR
 
   endRow = Split(Replace(Split(Range(bottomNamedRange).Address, ":")(0), "$", "", 1, 1), "$")(1) - 1
  
-  Rows(startRow & ":" & endRow).Select
-  Selection.Delete Shift:=xlToLeft
+  Rows(startRow & ":" & endRow).Delete Shift:=xlToLeft
       
 End Function
 
@@ -256,8 +253,7 @@ Public Function delRowsBelowNameRange(nameRange As String)
   startRow = Split(Replace(Split(Range(nameRange).Address, ":")(1), "$", "", 1, 1), "$")(1) + 1
   startRow = Replace(Split(Range(nameRange).Address, ":")(1), "$", "", 1, 1) + 1
  
-  Rows(startRow & ":" & endRow).Select
-  Selection.Delete Shift:=xlToLeft
+  Rows(startRow & ":" & endRow).Delete Shift:=xlToLeft
       
 End Function
 
@@ -284,8 +280,7 @@ Public Function delColAfterNameRanges(startNamedRange)
   endColumn = sht.UsedRange.Columns(sht.UsedRange.Columns.Count).Column
     
     
-  Columns(Split(Cells(1, startColumn).Address, "$")(1) & ":" & Split(Cells(1, endColumn).Address, "$")(1)).Select
-  Selection.Delete Shift:=xlToLeft
+  Columns(Split(Cells(1, startColumn).Address, "$")(1) & ":" & Split(Cells(1, endColumn).Address, "$")(1)).Delete Shift:=xlToLeft
     
 End Function
 
@@ -303,8 +298,7 @@ Public Function delColBeforeNameRange(namedRange,Optional startColumn As Long = 
      
   endColumn = Columns(Split(Replace(Split(Range(namedRange).Address, ":")(0), "$", "", 1, 1), "$")(0)).Column - 1
 
-  Columns(Split(Cells(1, startColumn).Address, "$")(1) & ":" & Split(Cells(1, endColumn).Address, "$")(1)).Select
-  Selection.Delete Shift:=xlToLeft
+  Columns(Split(Cells(1, startColumn).Address, "$")(1) & ":" & Split(Cells(1, endColumn).Address, "$")(1)).Delete Shift:=xlToLeft
     
 End Function
 
