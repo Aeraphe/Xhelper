@@ -307,12 +307,13 @@ End Function
 
 '/*
 '
-'Delete Empty Rows in selected RangeNamed by select a cell to check the empty condition
+'Delete Rows by check cell value condition
 '
-'@param {String} rangeNamed : Ramge name
-'@param {Long} cellColumn [Optional = 1] the cell column for check isEmpty
+'@param {String} startRow : Start row for check the cell
+'@param {Long} columnCheckEmpty [Optional = 1] the cell column for check isEmpty
+'@param {Variant} condition [Optional = ""] the cell condition for check
 '/*
-Public Function delEmptyRowsInRange(rangeNamed As String,Optional cellColumn As Long = 1)
+Public Function delRowsByCheckCellValue(Optional ByVal startRow As Long = 1,Optional ByVal columnCheckEmpty As Long = 1,Optional ByVal condition As Variant = "")
 
   Dim rn As Range
   Dim rowNumber As Variant
@@ -321,31 +322,34 @@ Public Function delEmptyRowsInRange(rangeNamed As String,Optional cellColumn As 
   firstRow = 0
   Dim lastRow As Long
   lastRow = 0
-  Set rn = Range(rangeNamed)
 
-  For each rowItem in rn.Rows
+  Dim sheetLastRow As Long
+  sheetLastRow =  Cells(Rows.Count,columnCheckEmpty).End(xlUp).Row
 
-   
-    rowNumber = rowItem.Row
 
-    cellValue =  Cells(rowNumber,cellColumn).Value
+  For rowNumber = startRow To sheetLastRow
 
-    If(cellValue = "" And firstRow = 0 ) then
+
+    cellValue =  Cells(rowNumber,columnCheckEmpty).Value
+
+    If(cellValue = condition And firstRow = 0 ) then
       firstRow = rowNumber
       'Selection(rowNumber).Delete Shift:=xlUp
     End IF
 
-    if(firstRow <> 0 And cellValue<> "" And lastRow = 0) then
+    if(firstRow <> 0 And cellValue<> condition And lastRow = 0) then
       lastRow = rowNumber
     End if
 
     if(firstRow<> 0 And  lastRow <> 0)Then
 
       Range(firstRow & ":" & lastRow).Delete Shift:=xlUp
-      Call delEmptyRowsInRange(rangeNamed, cellColumn)
+      Call delRowsByCheckCellValue(firstRow, columnCheckEmpty)
+      firstRow = 0
+      lastRow = 0
     End If
 
-  Next rowItem
+  Next rowNumber
 
 
 End Function
