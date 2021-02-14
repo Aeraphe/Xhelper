@@ -410,4 +410,29 @@ Public Function sheetExist(name As String)
   
 End Function
 
+'/*
+'
+' Get param from a existing sheet or return default param
+'
+'@param {String} sheetName : A sheet name where params are store
+'@param {Long} row : row number 
+'@param {Long} col : col number 
+'@param {Variant} defaultValue : user defined default value number 
+'
+'*/
+Function getSheetParam(sheetName As String,row, col, defaultValue)
   
+  Dim checkSheet As Boolean
+  Dim sheetValue As Variant
+  sheetValue = ""
+
+  checkSheet = Xhelper.sheetExist(sheetName)
+  
+  'If sheet exist get the value
+  If (checkSheet) Then
+   sheetValue = Application.Sheets(sheetName).Cells(row, col).Value
+  End If
+  'Return the value
+  getSheetParam = IIf(sheetValue <> "", sheetValue, defaultValue)
+
+End Function
