@@ -389,4 +389,25 @@ Public  Function saveFileWithoutFormulas(filename As String,filePath As String)
    
 End Function
 
- 
+
+'/*
+' Test if the sheet exist on AsctiveWorkbook
+'
+'@param {String} name: Sheet Name
+'
+'@return {Boolean} True if exist
+'                  False if not  
+'*/
+Public Function sheetExist(name As String)
+  
+  Dim check As Boolean
+  check = False
+
+  On Error Resume Next
+  check =  (ActiveWorkbook.Sheets(name).Index > 0)
+  
+  sheetExist = check
+  
+End Function
+
+  
