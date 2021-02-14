@@ -323,19 +323,33 @@ Public Function delEmptyRowsInRange(rangeNamed As String,Optional cellColumn As 
   Dim rn As Range
   Dim rowNumber As Variant
   Dim cellValue As Variant
+  Dim firstRow As Long
+  firstRow = 0
+  Dim lastRow As Long
+  lastRow = 0
   Set rn = Range(rangeNamed)
 
   For each rowItem in rn.Rows
 
-    rowItem.Select
+   
     rowNumber = rowItem.Row
 
     cellValue =  Cells(rowNumber,cellColumn).Value
 
-    If(IsEmpty(cellValue) OR cellValue = "") then
-      Range(rowNumber & ":" & rowNumber).Select
-      Selection.Delete Shift:=xlUp
+    If(cellValue = "" And firstRow = 0 ) then
+      firstRow = rowNumber
+      'Selection(rowNumber).Delete Shift:=xlUp
     End IF
+
+    if(firstRow <> 0 And cellValue<> "" And lastRow = 0) then
+      lastRow = rowNumber
+    End if
+
+    if(firstRow<> 0 And  lastRow <> 0)Then
+
+      Range(firstRow & ":" & lastRow).Delete Shift:=xlUp
+      Call delEmptyRowsInRange(rangeNamed, cellColumn)
+    End If
 
   Next rowItem
 
