@@ -315,7 +315,7 @@ End Function
 '/*
 Public Function delRowsByCheckCellValue(Optional ByVal startRow As Long = 1,Optional ByVal columnCheckEmpty As Long = 1,Optional ByVal condition As Variant = "")
 
-  Dim rn As Range
+
   Dim rowNumber As Variant
   Dim cellValue As Variant
   Dim firstRow As Long
@@ -355,6 +355,37 @@ Public Function delRowsByCheckCellValue(Optional ByVal startRow As Long = 1,Opti
 
 End Function
     
+
+Public Function delFirstColumnByCondition(nameRange As String, Optional ByVal condition As Variant = 0)
+ 
+  Dim sht As Worksheet
+  Dim sheetLastCol As Long
+  Set sht = ThisWorkbook.ActiveSheet
+    
+  sheetLastCol = sht.UsedRange.Columns(sht.UsedRange.Columns.Count).Column
+  Dim lastCol As Long
+  lastCol = sheetLastCol
+  Dim deleted As Boolean
+  deleted = False
+  
+  Dim startRow As Variant
+
+
+  On Error Resume Next
+  startRow = Split(Replace(Split(Range(nameRange).Address, ":")(1), "$", "", 1, 1), "$")(1) 
+  startRow = Replace(Split(Range(nameRange).Address, ":")(1), "$", "", 1, 1) 
+
+  While (sheetLastCol > 0 And deleted = False)
+    If (Cells(startRow, sheetLastCol) > condition) Then
+      Range(Cells(1, sheetLastCol+1).entirecolumn, Cells(1, lastCol).entirecolumn).Delete Shift:=xlToLeft
+      deleted = True
+    End If
+    
+    sheetLastCol = sheetLastCol - 1
+  Wend
+    
+End Function
+
 
 '/*
 '
@@ -443,7 +474,7 @@ Function getSheetParam(sheetName As String,row, col, defaultValue)
   
   'If sheet exist get the value
   If (checkSheet) Then
-   sheetValue = Application.Sheets(sheetName).Cells(row, col).Value
+    sheetValue = Application.Sheets(sheetName).Cells(row, col).Value
   End If
   'Return the value
   getSheetParam = IIf(sheetValue <> "", sheetValue, defaultValue)
