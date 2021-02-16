@@ -198,41 +198,6 @@ Public Function delColBetweenNameRanges(startNamedRange,endNamedRange)
   
 End Function
 
-'/*
-'This Function Return Range Columns and Rows Values
-'
-'@param {String} rangeName
-'
-'@return {Dictionary} rangeData : rangeData("START_COL_NB")  Start Column number
-'                                 rangeData("START_COL")  Start Column Letter
-'                                 rangeData("END_COL_NB")
-'                                 rangeData("END_COL") 
-'                                 rangeData("START_ROW")
-'                                 rangeData("END_ROW")
-'                                 rangeData("Address") 
-'*/
-Public Function getRangeAddress(rangeName As String) As Object
-
-  
-  Dim rangeData As Object
-  Set rangeData = CreateObject("Scripting.Dictionary") 
-
-  rangeData("Address") = Range(rangeName).Address
-  
-  Dim SplitedRangeAddress As Variant
-  SplitedRangeAddress = Split(rangeData("Address"), ":")
-
-  rangeData("START_COL_NB") = Columns(Split(Replace(SplitedRangeAddress(0), "$", "", 1, 1), "$")(0)).Column
-  rangeData("START_COL") =  Split(Cells(1, rangeData("START_COL_NB")).Address, "$")(1)
-  rangeData("END_COL_NB") = Columns(Split(Replace(SplitedRangeAddress(1), "$", "", 1, 1), "$")(0)).Column
-  rangeData("END_COL") =  Split(Cells(1, rangeData("END_COL_NB")).Address, "$")(1)
-
-  rangeData("START_ROW") = Split(Replace(SplitedRangeAddress(0), "$", "", 1, 1), "$")(1)
-  rangeData("END_ROW") = Split(Replace(SplitedRangeAddress(1), "$", "", 1, 1), "$")(1)
-  
-  Set getRangeAddress = rangeData
-
-End Function
 
 
 
@@ -515,5 +480,84 @@ Function getSheetParam(sheetName As String,row, col, defaultValue)
   End If
   'Return the value
   getSheetParam = IIf(sheetValue <> "", sheetValue, defaultValue)
+
+End Function
+
+
+
+'/*
+' Delete Columns Range by check a Condition on cell 
+'
+'@param{Long}  startColumn:  Start column number for check the range
+'@param{Long}  lastColumn:  Last column number for check range of columns
+'@param{Long}  condition:  Condition to check for delete
+'@param{Long}  rowConditonCheck:  Therow where to check the condition
+'
+'*/
+Public  Function DeleteColumnsByCondition(startColumn,lastColumn,condition,rowConditonCheck)
+
+  Dim colNumber As Long
+  Dim firstColRange As Long
+  Dim lasColRange As Long
+  firstColRange = 0
+  lasColRange = 0
+  For colNumber = startColumn To lastColumn
+    if(Cells(rowConditonCheck,colNumber).Value = condition And firstColRange = 0) Then
+      firstColRange = colNumber
+    End If
+
+    if(Cells(rowConditonCheck,colNumber).Value <> condition And lasColRange = 0 And firstColRange = 0) Then
+      lasColRange = colNumber
+    End If
+
+    If( lasColRange <> 0 And firstColRange <> 0) Then
+
+
+      Columns(Split(Cells(1, colNumber).Address, "$")(1) & ":" & Split(Cells(1, colNumber).Address, "$")(1)).Delete Shift:=xlToLeft
+    
+      DeleteColumnsByCondition(colNumber,lastColumn - colNumber,condition,rowConditonCheck)
+      lasColRange = 0 
+      firstColRange = 0
+    End IF
+  Next colNumber
+
+End Function
+
+
+
+  
+'/*
+'This Function Return Range Columns and Rows Values
+'
+'@param {String} rangeName
+'
+'@return {Dictionary} rangeData : rangeData("START_COL_NB")  Start Column number
+'                                 rangeData("START_COL")  Start Column Letter
+'                                 rangeData("END_COL_NB")
+'                                 rangeData("END_COL") 
+'                                 rangeData("START_ROW")
+'                                 rangeData("END_ROW")
+'                                 rangeData("Address") 
+'*/
+Public Function getRangeAddress(rangeName As String) As Object
+
+  
+  Dim rangeData As Object
+  Set rangeData = CreateObject("Scripting.Dictionary") 
+
+  rangeData("Address") = Range(rangeName).Address
+  
+  Dim SplitedRangeAddress As Variant
+  SplitedRangeAddress = Split(rangeData("Address"), ":")
+
+  rangeData("START_COL_NB") = Columns(Split(Replace(SplitedRangeAddress(0), "$", "", 1, 1), "$")(0)).Column
+  rangeData("START_COL") =  Split(Cells(1, rangeData("START_COL_NB")).Address, "$")(1)
+  rangeData("END_COL_NB") = Columns(Split(Replace(SplitedRangeAddress(1), "$", "", 1, 1), "$")(0)).Column
+  rangeData("END_COL") =  Split(Cells(1, rangeData("END_COL_NB")).Address, "$")(1)
+
+  rangeData("START_ROW") = Split(Replace(SplitedRangeAddress(0), "$", "", 1, 1), "$")(1)
+  rangeData("END_ROW") = Split(Replace(SplitedRangeAddress(1), "$", "", 1, 1), "$")(1)
+  
+  Set getRangeAddress = rangeData
 
 End Function
