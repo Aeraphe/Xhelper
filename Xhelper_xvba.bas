@@ -198,8 +198,45 @@ Public Function delColBetweenNameRanges(startNamedRange,endNamedRange)
   
 End Function
 
+'/*
+'This Function Return Range Columns and Rows Values
+'
+'@param {String} rangeName
+'
+'@return {Dictionary} rangeData : rangeData("START_COL_NB")  Start Column number
+'                                 rangeData("START_COL")  Start Column Letter
+'                                 rangeData("END_COL_NB")
+'                                 rangeData("END_COL") 
+'                                 rangeData("START_ROW")
+'                                 rangeData("END_ROW")
+'                                 rangeData("Address") 
+'*/
+Public Function getRangeAddress(rangeName As String) As Object
 
   
+  Dim rangeData As Object
+  Set rangeData = CreateObject("Scripting.Dictionary") 
+
+  rangeData("Address") = Range(rangeName).Address
+  
+  Dim SplitedRangeAddress As Variant
+  SplitedRangeAddress = Split(rangeData("Address"), ":")
+
+  rangeData("START_COL_NB") = Columns(Split(Replace(SplitedRangeAddress(0), "$", "", 1, 1), "$")(0)).Column
+  rangeData("START_COL") =  Split(Cells(1, rangeData("START_COL_NB")).Address, "$")(1)
+  rangeData("END_COL_NB") = Columns(Split(Replace(SplitedRangeAddress(1), "$", "", 1, 1), "$")(0)).Column
+  rangeData("END_COL") =  Split(Cells(1, rangeData("END_COL_NB")).Address, "$")(1)
+
+  rangeData("START_ROW") = Split(Replace(SplitedRangeAddress(0), "$", "", 1, 1), "$")(1)
+  rangeData("END_ROW") = Split(Replace(SplitedRangeAddress(1), "$", "", 1, 1), "$")(1)
+  
+  Set getRangeAddress = rangeData
+
+End Function
+
+
+
+
 '/*
 ' This Function Delete rows between top and Bottom NamedRanges
 '
