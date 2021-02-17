@@ -506,16 +506,16 @@ Public  Function DeleteColumnsByCondition(startColumn,lastColumn,condition,rowCo
       firstColRange = colNumber
     End If
 
-    if(Cells(rowConditonCheck,colNumber).Value <> condition And lasColRange = 0 And firstColRange = 0) Then
-      lasColRange = colNumber
+    if(Cells(rowConditonCheck,colNumber).Value <> condition And lasColRange = 0 And firstColRange <> 0) Then
+      lasColRange = colNumber - 1
     End If
 
     If( lasColRange <> 0 And firstColRange <> 0) Then
 
 
-      Columns(Split(Cells(1, colNumber).Address, "$")(1) & ":" & Split(Cells(1, colNumber).Address, "$")(1)).Delete Shift:=xlToLeft
+      Columns(Split(Cells(1, firstColRange).Address, "$")(1) & ":" & Split(Cells(1, lasColRange).Address, "$")(1)).Delete Shift:=xlToLeft
     
-      DeleteColumnsByCondition(colNumber,lastColumn - colNumber,condition,rowConditonCheck)
+      Call DeleteColumnsByCondition(colNumber,lastColumn - colNumber,condition,rowConditonCheck)
       lasColRange = 0 
       firstColRange = 0
     End IF
