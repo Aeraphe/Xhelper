@@ -358,7 +358,7 @@ Public Function delRowsByCheckCellValue(Optional ByVal startRow As Long = 1,Opti
 End Function
     
 
-Public Function delFirstColumnByCondition(nameRange As String, Optional ByVal condition As Variant = 0)
+Public Function delColumnsUntil(nameRange As String, Optional ByVal condition As Variant = 0)
  
   Dim sht As Worksheet
   Dim sheetLastCol As Long
