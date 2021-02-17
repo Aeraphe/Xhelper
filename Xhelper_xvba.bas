@@ -501,19 +501,21 @@ Public  Function DeleteColumnsByCondition(startColumn,lastColumn,condition,rowCo
   Dim lasColRange As Long
   firstColRange = 0
   lasColRange = 0
+
+  Dim col As String
   For colNumber = startColumn To lastColumn
     if(Cells(rowConditonCheck,colNumber).Value = condition And firstColRange = 0) Then
       firstColRange = colNumber
     End If
 
     if(Cells(rowConditonCheck,colNumber).Value <> condition And lasColRange = 0 And firstColRange <> 0) Then
-      lasColRange = colNumber - 1
+      lasColRange = colNumber
     End If
 
     If( lasColRange <> 0 And firstColRange <> 0) Then
 
-
-      Columns(Split(Cells(1, firstColRange).Address, "$")(1) & ":" & Split(Cells(1, lasColRange).Address, "$")(1)).Delete Shift:=xlToLeft
+      
+      Columns(getColumnLetter(firstColRange) & ":" & getColumnLetter(lasColRange - 1)).Delete Shift:=xlToLeft
     
       Call DeleteColumnsByCondition(colNumber,lastColumn - colNumber,condition,rowConditonCheck)
       lasColRange = 0 
@@ -523,7 +525,15 @@ Public  Function DeleteColumnsByCondition(startColumn,lastColumn,condition,rowCo
 
 End Function
 
-
+'/*
+' Get column letter by giving column number
+'
+'@param {Long} colNumber: Column number
+'@return {String} column letter
+'*/
+Public Function getColumnLetter(colNumber As Long) As String
+  getColumnLetter = Split(Cells(1, colNumber).Address, "$")(1)
+End Function
 
   
 '/*
