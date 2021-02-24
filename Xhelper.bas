@@ -423,15 +423,15 @@ End Function
 ' This Function Save new workbook with without formulas in xlsx
 '
 '*/
-Public  Function saveFileWithoutFormulas(filename As String,filePath As String)
-  Dim App As Application
-  Set App = Application
-  'Save CPU file
-  Application.DisplayAlerts = False
-  Dim CpuFileName As String
-  CpuFileName = filePath & "\" & filename & ".xlsx"
-  App.ThisWorkbook.SaveAs Filename:=CpuFileName, FileFormat:=xlOpenXMLWorkbook
-  App.ThisWorkbook.Save
+Public  Function saveFileWithoutFormulas(defaultFileName As String)
+ 'displays the save file dialog
+ Dim fileNameSaved As Variant
+
+ fileNameSaved = Application.GetSaveAsFilename(defaultFileName)
+ if(fileNameSaved <> False)Then
+   Application.DisplayAlerts = False
+   ThisWorkbook.SaveAs Filename:=fileNameSaved & "xlsx", FileFormat:=xlOpenXMLWorkbook
+ End if
    
 End Function
 
