@@ -211,8 +211,9 @@ Public Function delRowsBetweenNameRanges(topNamedRange As String,bottomNamedRang
 
   Dim startRow As Variant
   Dim endRow As Variant
-    
+  On Error Resume Next
   startRow = Split(Replace(Split(Range(topNamedRange).Address, ":")(1), "$", "", 1, 1), "$")(1) + 1
+  startRow = Replace(Split(Range(topNamedRange).Address, ":")(1), "$", "", 1, 1) + 1
   On Error Resume Next
   endRow = Split(Replace(Split(Range(bottomNamedRange).Address, ":")(0), "$", "", 1, 1), "$")(1) - 1
   endRow = Replace(Split(Range(bottomNamedRange).Address, ":")(0), "$", "", 1, 1) - 1
@@ -339,7 +340,7 @@ Public Function delRowsByCheckCellValue(Optional ByVal startRow As Long = 1,Opti
     End IF
 
     if(firstRow <> 0 And cellValue<> condition And lastRow = 0) then
-      lastRow = rowNumber
+      lastRow = rowNumber - 1
     End if
 
     if(firstRow<> 0 And  lastRow <> 0)Then
@@ -358,13 +359,11 @@ Public Function delRowsByCheckCellValue(Optional ByVal startRow As Long = 1,Opti
 End Function
     
 
-Public Function delColumnsUntil(nameRange As String, Optional ByVal condition As Variant = 0)
+Public Function delColumnsUntil(nameRange As String,sheetLastCol As Long, Optional ByVal condition As Variant = 0)
  
   Dim sht As Worksheet
-  Dim sheetLastCol As Long
   Set sht = ThisWorkbook.ActiveSheet
     
-  sheetLastCol = sht.UsedRange.Columns(sht.UsedRange.Columns.Count).Column
   Dim lastCol As Long
   lastCol = sheetLastCol
   Dim deleted As Boolean
@@ -373,13 +372,15 @@ Public Function delColumnsUntil(nameRange As String, Optional ByVal condition As
   Dim startRow As Variant
 
 
+
   On Error Resume Next
   startRow = Split(Replace(Split(Range(nameRange).Address, ":")(1), "$", "", 1, 1), "$")(1) 
   startRow = Replace(Split(Range(nameRange).Address, ":")(1), "$", "", 1, 1) 
 
   While (sheetLastCol > 0 And deleted = False)
     If (Cells(startRow, sheetLastCol) > condition) Then
-      Range(Cells(1, sheetLastCol+1).entirecolumn, Cells(1, lastCol).entirecolumn).Delete Shift:=xlToLeft
+      Range(Cells(1, sheetLastCol+1).entirecolumn,Cells(1, lastCol).entirecolumn).Select
+      Selection.Delete Shift:=xlToLeft
       deleted = True
     End If
     
@@ -424,14 +425,14 @@ End Function
 '
 '*/
 Public  Function saveFileWithoutFormulas(defaultFileName As String)
- 'displays the save file dialog
- Dim fileNameSaved As Variant
+  'displays the save file dialog
+  Dim fileNameSaved As Variant
 
- fileNameSaved = Application.GetSaveAsFilename(defaultFileName)
- if(fileNameSaved <> False)Then
-   Application.DisplayAlerts = False
-   ThisWorkbook.SaveAs Filename:=fileNameSaved & "xlsx", FileFormat:=xlOpenXMLWorkbook
- End if
+  fileNameSaved = Application.GetSaveAsFilename(defaultFileName)
+  if(fileNameSaved <> False)Then
+    Application.DisplayAlerts = False
+    ThisWorkbook.SaveAs Filename:=fileNameSaved & "xls", FileFormat:=xlExcel8
+  End if
    
 End Function
 
