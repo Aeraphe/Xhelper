@@ -268,22 +268,22 @@ End Function
 '@param {String} startNamedRange : Name Range
 '
 '*/
-Public Function delColAfterNameRanges(startNamedRange)
+Public Function delColAfterNameRanges(ByRef startNamedRange As String, Optional step As Integer = 1)
 
 
-  Dim startColumn As Variant
+  Dim startNameRangeDetails As Object
   Dim endColumn As Variant
 
   Dim sht As Worksheet
   Set sht = ThisWorkbook.ActiveSheet
-  
      
-  startColumn = Columns(Split(Replace(Split(Range(startNamedRange).Address, ":")(1), "$", "", 1, 1), "$")(0)).Column + 1
-  'endColumn = Cells(1, Columns.Count).End(xlToLeft).Column
+  Set startNameRangeDetails = getRangeAddress(startNamedRange)
   endColumn = sht.UsedRange.Columns(sht.UsedRange.Columns.Count).Column
     
-    
-  Columns(Split(Cells(1, startColumn).Address, "$")(1) & ":" & Split(Cells(1, endColumn).Address, "$")(1)).Delete Shift:=xlToLeft
+  If (endColumn >= startNameRangeDetails("END_COL_NB") + step ) Then
+    Columns(Split(Cells(1, startNameRangeDetails("END_COL_NB") + step).Address, "$")(1) & ":" & Split(Cells(1, endColumn).Address, "$")(1)).Delete Shift:=xlToLeft
+  End If
+ 
     
 End Function
 
