@@ -369,21 +369,17 @@ Public Function delColumnsUntil(nameRange As String,sheetLastCol As Long, Option
   Dim deleted As Boolean
   deleted = False
   
-  Dim startRow As Variant
+  Dim nameRangeDetails As Variant
 
+  Set nameRangeDetails = Xhelper.getRangeAddress(nameRange)
 
-
-  On Error Resume Next
-  startRow = Split(Replace(Split(Range(nameRange).Address, ":")(1), "$", "", 1, 1), "$")(1) 
-  startRow = Replace(Split(Range(nameRange).Address, ":")(1), "$", "", 1, 1) 
 
   While (sheetLastCol > 0 And deleted = False)
-    If (Cells(startRow, sheetLastCol) > condition) Then
-      Range(Cells(1, sheetLastCol+1).entirecolumn,Cells(1, lastCol).entirecolumn).Select
+    If (Cells(nameRangeDetails("START_ROW"), lastCol) = condition And Cells(nameRangeDetails("START_ROW"), sheetLastCol) <> condition) Then
+      Range(Cells(1, sheetLastCol + 1).EntireColumn, Cells(1, lastCol).EntireColumn).Select
       Selection.Delete Shift:=xlToLeft
       deleted = True
     End If
-    
     sheetLastCol = sheetLastCol - 1
   Wend
     
@@ -424,7 +420,7 @@ End Function
 ' This Function Save new workbook with without formulas in xlsx
 '
 '*/
-Public  Function saveFileWithoutFormulas(defaultFileName As String)
+Public  Function saveFileWithoutFormulas(defaultFileName As String) As Boolean
   'displays the save file dialog
   Dim fileNameSaved As Variant
 
@@ -432,8 +428,11 @@ Public  Function saveFileWithoutFormulas(defaultFileName As String)
   if(fileNameSaved <> False)Then
     Application.DisplayAlerts = False
     ThisWorkbook.SaveAs Filename:=fileNameSaved & "xls", FileFormat:=xlExcel8
+    saveFileWithoutFormulas = True
+  Else 
+    saveFileWithoutFormulas  = False
   End if
-   
+  
 End Function
 
 
@@ -555,19 +554,74 @@ Public Function getRangeAddress(rangeName As String) As Object
   
   Dim rangeData As Object
   Set rangeData = CreateObject("Scripting.Dictionary") 
-
+  Dim checkRangeType As Boolean 
+  checkRangeType = Len(rangeName) And Not rangeName Like "*[!a-zA-Z]*"
+  rangeData("AddressRC") = Range(rangeName).Address(ReferenceStyle:=xlR1C1)
   rangeData("Address") = Range(rangeName).Address
+
+  Dim regExRow As Object
+  Set regExRow = CreateObject("VBScript.RegExp")
+  regExRow.Global = True
+
+
+  Dim regTestRow, regTest2Rows,  regTest2Columns, regTestRowColumn  As Boolean
   
+
+
+ 
   Dim SplitedRangeAddress As Variant
-  SplitedRangeAddress = Split(rangeData("Address"), ":")
 
-  rangeData("START_COL_NB") = Columns(Split(Replace(SplitedRangeAddress(0), "$", "", 1, 1), "$")(0)).Column
-  rangeData("START_COL") =  Split(Cells(1, rangeData("START_COL_NB")).Address, "$")(1)
-  rangeData("END_COL_NB") = Columns(Split(Replace(SplitedRangeAddress(1), "$", "", 1, 1), "$")(0)).Column
-  rangeData("END_COL") =  Split(Cells(1, rangeData("END_COL_NB")).Address, "$")(1)
+  'Check Range Size 
+  If (InStr(rangeData("AddressRC"),":")<> 0 ) Then 
+    
+  
+    regExRow.pattern =  "^R([0-9]+)\:R([0-9]+)" 'Rows R1:R10
+    regTest2Rows = regExRow.test(rangeData("AddressRC"))
 
-  rangeData("START_ROW") = Split(Replace(SplitedRangeAddress(0), "$", "", 1, 1), "$")(1)
-  rangeData("END_ROW") = Split(Replace(SplitedRangeAddress(1), "$", "", 1, 1), "$")(1)
+    regExRow.pattern =  "^C([0-9]+)\:C([0-9]+)" 'Columns C1:C10 
+    regTest2Columns = regExRow.test(rangeData("AddressRC"))
+
+    regExRow.pattern =  "^R([0-9]+)C([0-9]+)\:R([0-9]+)C([0-9]+)" 'row x Column R102C1:R102C695 
+    regTestRowColumn = regExRow.test(rangeData("AddressRC"))
+
+    If(regTest2Rows)Then
+      SplitedRangeAddress = Split(rangeData("AddressRC"), ":")
+      rangeData("START_ROW") = CInt(Replace(SplitedRangeAddress(0), "R", ""))
+      rangeData("END_ROW") = CInt(Replace(SplitedRangeAddress(1), "R", ""))
+
+    end If 
+    
+    If(regTest2Columns)Then
+      SplitedRangeAddress = Split(rangeData("AddressRC"), ":")
+      rangeData("START_COL_NB") = CInt(Replace(SplitedRangeAddress(0), "C", ""))
+      rangeData("START_COL") =  Split(Cells(1, rangeData("START_COL_NB")).Address, "$")(1)
+      rangeData("END_COL_NB") = CInt(Replace(SplitedRangeAddress(1), "C", ""))
+      rangeData("END_COL") =  Split(Cells(1, rangeData("END_COL_NB")).Address, "$")(1)
+    end If 
+    
+    If(regTestRowColumn)Then
+      SplitedRangeAddress = Split(rangeData("Address"), ":")
+      rangeData("START_COL_NB") = CInt(Columns(Split(Replace(SplitedRangeAddress(0), "$", "", 1, 1), "$")(0)).Column)
+      rangeData("START_COL") =  Split(Cells(1, rangeData("START_COL_NB")).Address, "$")(1)
+      rangeData("END_COL_NB") = CInt(Columns(Split(Replace(SplitedRangeAddress(1), "$", "", 1, 1), "$")(0)).Column)
+      rangeData("END_COL") =  Split(Cells(1, rangeData("END_COL_NB")).Address, "$")(1)
+      rangeData("START_ROW") = Split(Replace(SplitedRangeAddress(0), "$", "", 1, 1), "$")(1)
+      rangeData("END_ROW") = Split(Replace(SplitedRangeAddress(1), "$", "", 1, 1), "$")(1)
+    End If
+
+  Else
+    regExRow.pattern = "^R([0-9]+)" 'R1
+    regTestRow = regExRow.test(rangeData("AddressRC")) 'Row R1
+  
+    if(regTestRow)then
+      rangeData("START_ROW") = CInt(Replace(rangeData("AddressRC"), "R", ""))
+    else
+      rangeData("START_COL_NB") = CInt(Replace(rangeData("AddressRC"), "C", ""))
+    end if
+
+  End If
+
+
   
   Set getRangeAddress = rangeData
 
