@@ -626,3 +626,27 @@ Public Function getRangeAddress(rangeName As String) As Object
   Set getRangeAddress = rangeData
 
 End Function
+
+
+'/*
+'Clear cells value in all sheets
+'
+'@param {Variant} clearValue : Default  = "0"
+'*/
+Function ClearValuesFromAllCells(Optional clearValue As Variant = 0)
+
+  Dim SHEETS_COUNT As Integer
+  Dim i As Integer
+      
+    
+  SHEETS_COUNT = ActiveWorkbook.Worksheets.Count
+    
+  For i = 1 To SHEETS_COUNT
+    ActiveWorkbook.Worksheets(i).Select
+    Cells.Replace What:=clearValue , Replacement:="", LookAt:=xlWhole, SearchOrder:=xlByRows, MatchCase:=True, SearchFormat:=False, ReplaceFormat:=False
+    
+  Next i
+    
+    
+    
+End Function
