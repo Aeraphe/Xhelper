@@ -91,10 +91,13 @@ Public Function clearFormulas()
 
   For Each ws In Sheets
     ws.Visible = True
-    ws.Select (False)
+    ws.Select
+    With Cells:
+      .Copy:
+      .PasteSpecial xlPasteValues:
+    End With
     Next
 
-    With Cells: .Copy: .PasteSpecial xlPasteValues: End With
 
 End Function
 
