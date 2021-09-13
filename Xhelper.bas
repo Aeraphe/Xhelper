@@ -10,6 +10,17 @@ Attribute VB_Name = "Xhelper"
 '*/
 
 
+'/*
+'
+'A function for Delay excel Application
+'
+'@param Long : ms  = Millisecond
+'
+'*/
+Public Function waitMs(ms As Long)
+  Application.Wait (Now + (ms * 0.00000001))
+End Function
+
 
 '/*
 '
